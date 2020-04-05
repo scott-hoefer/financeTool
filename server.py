@@ -13,6 +13,7 @@ app = Flask(__name__)
 
 
 # Fill in your Plaid API keys - https://dashboard.plaid.com/account/keys
+# TODO REMOVE PUBLIC SANDBOX CREDENTIALS
 PLAID_CLIENT_ID = os.getenv('PLAID_CLIENT_ID', '5e65576c5b19850013166e78')
 PLAID_SECRET = os.getenv('PLAID_SECRET', '1c542b313422543a3d9621eae432b0')
 PLAID_PUBLIC_KEY = os.getenv('PLAID_PUBLIC_KEY', 'e45f9bc82f2413262c684d2c0c19a6')
@@ -127,7 +128,31 @@ def get_transactions():
     if 'Restaurants' in tran['category']:
       resTotal += float(tran['amount'])
   print('Total spent at restaurants in the last month is {}'.format(resTotal))
-  return jsonify({'error': None, 'transactions': transactions_response})
+  print('calling expenseTypeTotal...')
+  chart_values = transform_trans_data(transactions_response['transactions'])
+  return jsonify({'error': None, 'transactions': transactions_response, 'chart_data': chart_values})
+
+def transform_trans_data(transactions):
+  print(str(type(transactions)))
+  try:    
+    chartValues = dict()
+    for tran in transactions:
+      c = str(tran['category'])
+      a = float(tran['amount'])
+      if c not in chartValues.keys():
+        chartValues[c] = float(a)
+      else:
+        chartValues[c] += float(a)
+    return chartValues
+    # print("dictionary is {}".format(str(chartValues)))
+    # TODO not sure how to sum the amount as we go in a dict comprehension, or if its possible in a dict comprehension
+    # valuesComp = {str(tran['category']):float(tran['amount']) for tran in transactions}
+    # print('CHART VALUES USING DICT COMPREHENSION: {}'.format(str(valuesComp)))
+  except Exception as e:
+    print("error occurred when trying to create bar chart dict")
+    print(e)
+    return None
+
 
 # Retrieve Identity data for an Item
 # https://plaid.com/docs/#identity
