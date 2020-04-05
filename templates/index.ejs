@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Plaid Quickstart Example</title>
+  <title>Scooters Financial Tracker</title>
   <link rel="stylesheet" href="https://threads.plaid.com/threads.css">
   <link rel="stylesheet" type="text/css" href="/static/style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,9 +13,9 @@
     <div class="grid">
       <div class="grid__column grid__column--is-twelve-columns">
         <div id="banner" class="everpresent-content">
-          <h1 class="everpresent-content__heading">Plaid Quickstart</h1>
+          <h1 class="everpresent-content__heading">Scooters Finance Tracker</h1>
           <p id="intro" class="everpresent-content__subheading">
-            An example application that outlines an end-to-end integration with Plaid
+            Personal tool for visualizing your financial data and tracking your spending.
           </p>
           <p id="steps" class="everpresent-content__subheading">
            Success! You just created an Item by linking your account.
@@ -24,10 +24,10 @@
 
         <div id="container" class="initial-view">
           <p class="initial-view__description">
-            Click the button below to open a list of Institutions. After you select one, you’ll be guided through an authentication process. Upon completion, a public_token will be passed back to the server and exchanged for access_token.
+            Click the button below to login with your banking institution. 
           </p>
 
-          <button id="link-btn" class="button button--is-primary" disabled>Connect with Plaid</button>
+          <button id="link-btn" class="button button--is-primary" disabled>Login</button>
           <div class="loading-indicator"></div>
         </div>
 
@@ -56,7 +56,7 @@
             <h3 class="box__heading">Products</h3>
 
             <!-- Auth -->
-            <div class="item-data-row">
+            <!-- <div class="item-data-row">
               <div class="item-data-row__left">
                 <div class="item-data-row__request-type">post</div>
               </div>
@@ -71,20 +71,20 @@
               <div class="item-data-row__response">
                 <table><tbody id="get-auth-data"></tbody></table>
               </div>
-            </div>
+            </div> -->
 
             <!--Transactions -->
             <div class="item-data-row">
               <div class="item-data-row__left">
-                <div class="item-data-row__request-type">post</div>
+                <div class="item-data-row__request-type">Transactions</div>
               </div>
               <div class="item-data-row__center">
-                <div class="item-data-row__nicename">Transactions</div>
-                <div class="item-data-row__endpoint">/transactions/get</div>
-                <div class="item-data-row__description">Retrieve transactions for credit and depository accounts.</div>
+                <div class="item-data-row__nicename">Transactions by category</div>
+                <div class="item-data-row__endpoint">Transactions made in the last 30 days</div>
+                <div class="item-data-row__description">See how much you have spent in the last month by purchase category.</div>
               </div>
               <div class="item-data-row__right">
-                <button id="get-transactions-btn" class="button button--is-small button--is-default button--is-full-width">Send request</button>
+                <button id="get-transactions-btn" class="button button--is-small button--is-default button--is-full-width">Show Chart</button>
               </div>
               <div class="item-data-row__response">
                 <table><tbody id="get-transactions-data"></tbody></table>
@@ -95,7 +95,7 @@
             </div>
 
             <!-- Identity -->
-            <div class="item-data-row">
+            <!-- <div class="item-data-row">
               <div class="item-data-row__left">
                 <div class="item-data-row__request-type">post</div>
               </div>
@@ -110,10 +110,10 @@
               <div class="item-data-row__response">
                 <table><tbody id="get-identity-data"></tbody></table>
               </div>
-            </div>
+            </div> -->
 
             <!-- Balance -->
-            <div class="item-data-row">
+            <!-- <div class="item-data-row">
               <div class="item-data-row__left">
                 <div class="item-data-row__request-type">post</div>
               </div>
@@ -128,10 +128,10 @@
               <div class="item-data-row__response">
                 <table><tbody id="get-balance-data"></tbody></table>
               </div>
-            </div>
+            </div> -->
 
             <!-- Holdings -->
-            <div class="item-data-row">
+            <!-- <div class="item-data-row">
               <div class="item-data-row__left">
                 <div class="item-data-row__request-type">post</div>
               </div>
@@ -146,10 +146,10 @@
               <div class="item-data-row__response">
                 <table><tbody id="get-holdings-data"></tbody></table>
               </div>
-            </div>
+            </div> -->
 
             <!-- Investment Transactions -->
-            <div class="item-data-row">
+            <!-- <div class="item-data-row">
               <div class="item-data-row__left">
                 <div class="item-data-row__request-type">post</div>
               </div>
@@ -164,11 +164,11 @@
               <div class="item-data-row__response">
                 <table><tbody id="get-investment-transactions-data"></tbody></table>
               </div>
-            </div>
+            </div> -->
 
 
             <!-- Assets (hidden unless 'assets' is included in the product list) -->
-            <div id='assets' class="item-data-row" style='display:none;'>
+            <!-- <div id='assets' class="item-data-row" style='display:none;'>
 
                 <div class="item-data-row__left">
                   <div class="item-data-row__request-type">post</div>
@@ -188,7 +188,7 @@
                 <div class="item-data-row__response">
                   <table><tbody id="get-assets-data"></tbody></table>
                 </div>
-              </div>
+              </div>  -->
 
             <!-- UK Payment Initiation (hidden unless 'payment_initiation' is included in the product list) -->
             <div class="payment_initiation item-data-row" style='display:none;'>
@@ -212,7 +212,7 @@
 
           </div>
 
-          <div class="box">
+          <!-- <div class="box">
             <h3 class="box__heading">Item management</h3>
 
             <div class="item-data-row">
@@ -250,7 +250,7 @@
                 <table><tbody id="get-accounts-data"></tbody></table>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
