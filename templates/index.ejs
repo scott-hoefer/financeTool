@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Plaid Quickstart Example</title>
-<link rel="stylesheet" href="https://threads.plaid.com/threads.css">
-
-<link rel="stylesheet" type="text/css" href="/static/style.css">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <title>Plaid Quickstart Example</title>
+  <link rel="stylesheet" href="https://threads.plaid.com/threads.css">
+  <link rel="stylesheet" type="text/css" href="/static/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src='static/Chart.min.js'></script>
 </head>
 <body>
   <main class="main">
@@ -88,6 +88,9 @@
               </div>
               <div class="item-data-row__response">
                 <table><tbody id="get-transactions-data"></tbody></table>
+              </div>
+              <div>
+                <canvas id="transBarChart" width="400" height="400"></canvas>
               </div>
             </div>
 
@@ -255,7 +258,6 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
   <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
-  <script src="~/node_modules/chart.js/dist/Chart.js"></script>
   <script>
   (function($) {
     // Handles redirect from the oauth response page for the oauth flow.
@@ -562,19 +564,37 @@
             });
           });
         } else {
-          $('#get-transactions-data').slideUp(function() {
-            var html = '<tr><td><strong>Name</strong></td><td><strong>Amount</strong></td><td><strong>Date</strong></td></tr>';
-            data.transactions.transactions.forEach(function(txn, idx) {
-              html += '<tr>';
-              html += '<td>' + txn.name + '</td>';
-              html += '<td>$' + txn.amount + '</td>';
-              html += '<td>' + txn.date + '</td>';
-              html += '</tr>';
-            });
+          // $('#get-transactions-data').slideUp(function() {
+          //   var html = '<tr><td><strong>Name</strong></td><td><strong>Amount</strong></td><td><strong>Date</strong></td></tr>';
+          //   data.transactions.transactions.forEach(function(txn, idx) {
+          //     html += '<tr>';
+          //     html += '<td>' + txn.name + '</td>';
+          //     html += '<td>$' + txn.amount + '</td>';
+          //     html += '<td>' + txn.date + '</td>';
+          //     html += '</tr>';
+          //   });
 
-            $(this).slideUp(function() {
-              $(this).html(html).slideDown();
-            });
+          //   $(this).slideUp(function() {
+          //     $(this).html(html).slideDown();
+          //   });
+          // });
+          var ctx = document.getElementById('transBarChart').getContext('2d');
+          var chart = new Chart(ctx, {
+              // The type of chart we want to create
+              type: 'bar',
+              // The data for our dataset
+              data: {
+                  labels: Object.keys(data.chart_data),
+                  datasets: [{
+                      label: 'My First dataset',
+                      backgroundColor: 'rgb(255, 99, 132)',
+                      borderColor: 'rgb(255, 99, 132)',
+                      data: Object.values(data.chart_data)
+                  }]
+              },
+
+              // Configuration options go here
+              options: {}
           });
         }
       });
