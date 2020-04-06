@@ -75,23 +75,39 @@
 
             <!--Transactions -->
             <div class="item-data-row">
-              <div class="item-data-row__left">
-                <div class="item-data-row__request-type">Transactions</div>
+              <div style="border: steelblue;">
+                <div class="item-data-row__left">
+                  <div class="item-data-row__request-type">Transactions</div>
+                </div>
+                <div class="item-data-row__center">
+                  <div class="item-data-row__nicename">Amount Per Expense Category</div>
+                  <div class="item-data-row__endpoint">for purchases made in the last 30 days</div>
+                  <div class="item-data-row__description">See how much you have spent in the last month by purchase category.</div>
+                </div>
+                <div class="item-data-row__right">
+                  <button id="get-transactions-btn" class="button button--is-small button--is-default button--is-full-width">Show Chart</button>
+                </div>
+                <div>
+                  <canvas id="transBarChart" width="400" height="400" style="display: none;"></canvas>
+                </div>
               </div>
-              <div class="item-data-row__center">
-                <div class="item-data-row__nicename">Transactions by category</div>
-                <div class="item-data-row__endpoint">Transactions made in the last 30 days</div>
-                <div class="item-data-row__description">See how much you have spent in the last month by purchase category.</div>
-              </div>
-              <div class="item-data-row__right">
-                <button id="get-transactions-btn" class="button button--is-small button--is-default button--is-full-width">Show Chart</button>
-              </div>
-              <div class="item-data-row__response">
-                <table><tbody id="get-transactions-data"></tbody></table>
-              </div>
-              <div>
-                <canvas id="transBarChart" width="400" height="400" style="display: none;"></canvas>
-              </div>
+              
+              <div class="trans-chart-container">
+                <div class="item-data-row__left" >
+                  <div class="item-data-row__request-type">Transactions</div>
+                </div>
+                <div class="item-data-row__center">
+                  <div class="item-data-row__nicename">Amount Spent Per Day</div>
+                  <div class="item-data-row__endpoint">for all purchases made in the last 30 days</div>
+                  <div class="item-data-row__description">See how much you have spent each day.</div>
+                </div>
+                <div class="item-data-row__right">
+                  <button id="get-transactions-btn" class="button button--is-small button--is-default button--is-full-width">Show Chart</button>
+                </div>
+                <div>
+                  <canvas id="transBarChart" width="400" height="400" style="display: none;"></canvas>
+                </div>
+              </div>              
             </div>
 
             <!-- Identity -->
