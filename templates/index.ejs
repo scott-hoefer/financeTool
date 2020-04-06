@@ -85,7 +85,7 @@
                   <div class="item-data-row__description">See how much you have spent in the last month by purchase category.</div>
                 </div>
                 <div class="item-data-row__right">
-                  <button id="get-transactions-btn" class="button button--is-small button--is-default button--is-full-width">Show Chart</button>
+                  <button id="get-trans-category-btn" class="button button--is-small button--is-default button--is-full-width">Show Chart</button>
                 </div>
                 <div>
                   <canvas id="transBarChart" width="400" height="400" style="display: none;"></canvas>
@@ -102,10 +102,10 @@
                   <div class="item-data-row__description">See how much you have spent each day.</div>
                 </div>
                 <div class="item-data-row__right">
-                  <button id="get-transactions-btn" class="button button--is-small button--is-default button--is-full-width">Show Chart</button>
+                  <button id="get-trans-date-btn" class="button button--is-small button--is-default button--is-full-width">Show Chart</button>
                 </div>
                 <div>
-                  <canvas id="transBarChart" width="400" height="400" style="display: none;"></canvas>
+                  <canvas id="transLineChart" width="400" height="400" style="display: none;"></canvas>
                 </div>
               </div>              
             </div>
@@ -557,8 +557,12 @@
       });
     });
 
-    $('#get-transactions-btn').on('click', function(e) {
-      $.get('/transactions', function(data) {
+    // $('#get-trans-date-btn').on('click', function(e)) {
+    //   $.get()
+    // }
+
+    $('#get-trans-category-btn').on('click', function(e) {
+      $.get('/transactions/category', function(data) {
         if (data.error != null && data.error.error_code != null) {
           // Format the error
           var errorHtml = '<div class="inner"><p>' +
@@ -595,7 +599,7 @@
           //   });
           // });
           var ctxElement = document.getElementById('transBarChart');
-          var btn = document.getElementById('get-transactions-btn');
+          var btn = document.getElementById('get-trans-category-btn');
           if (ctxElement.style.display === "none"){
             ctxElement.style.display = "block";
             btn.innerHTML = "Hide Chart";
@@ -611,7 +615,7 @@
               data: {
                   labels: Object.keys(data.chart_data),
                   datasets: [{
-                      label: 'My First dataset',
+                      label: 'Purchases by Category',
                       backgroundColor: 'rgb(255, 99, 132)',
                       borderColor: 'rgb(255, 99, 132)',
                       data: Object.values(data.chart_data)

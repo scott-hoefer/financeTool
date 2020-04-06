@@ -111,19 +111,24 @@ def get_auth():
 
 # Retrieve Transactions for an Item
 # https://plaid.com/docs/#transactions
-@app.route('/transactions', methods=['GET'])
+@app.route('/transactions/category', methods=['GET'])
+def get_amount_by_category():
+  transactions_response = get_transactions()
+  chart_values = chart_logic.get_transactions_by_category(transactions_response['transactions'])
+  return jsonify({'error': None, 'transactions': transactions_response, 'chart_data': chart_values})
+
 def get_transactions():
   # Pull transactions for the last 30 days
   start_date = '{:%Y-%m-%d}'.format(datetime.datetime.now() + datetime.timedelta(-30))
   end_date = '{:%Y-%m-%d}'.format(datetime.datetime.now())
   try:
     transactions_response = client.Transactions.get(access_token, start_date, end_date)
+    return transactions_response
   except plaid.errors.PlaidError as e:
     return jsonify(format_error(e))
   # print('PRINTING TRANSACTION RESP:')
   # pretty_print_response(transactions_response)
-  chart_values = chart_logic.get_transactions_by_category(transactions_response['transactions'])
-  return jsonify({'error': None, 'transactions': transactions_response, 'chart_data': chart_values})
+
 
 # Retrieve Identity data for an Item
 # https://plaid.com/docs/#identity
