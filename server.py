@@ -109,12 +109,18 @@ def get_auth():
   pretty_print_response(auth_response)
   return jsonify({'error': None, 'auth': auth_response})
 
-# Retrieve Transactions for an Item
+# Retrieve Transactions and amount per category
 # https://plaid.com/docs/#transactions
 @app.route('/transactions/category', methods=['GET'])
 def get_amount_by_category():
   transactions_response = get_transactions()
-  chart_values = chart_logic.get_transactions_by_category(transactions_response['transactions'])
+  chart_values = chart_logic.get_chart_data_category(transactions_response['transactions'])
+  return jsonify({'error': None, 'transactions': transactions_response, 'chart_data': chart_values})
+
+@app.route('/transactions/date', methods=['GET'])
+def get_amount_by_date():
+  transactions_response = get_transactions()
+  chart_values = chart_logic.get_chart_data_date(transactions_response['transactions'])
   return jsonify({'error': None, 'transactions': transactions_response, 'chart_data': chart_values})
 
 def get_transactions():
@@ -123,11 +129,11 @@ def get_transactions():
   end_date = '{:%Y-%m-%d}'.format(datetime.datetime.now())
   try:
     transactions_response = client.Transactions.get(access_token, start_date, end_date)
+    # print('PRINTING TRANSACTION RESP:')
+    # pretty_print_response(transactions_response)
     return transactions_response
   except plaid.errors.PlaidError as e:
-    return jsonify(format_error(e))
-  # print('PRINTING TRANSACTION RESP:')
-  # pretty_print_response(transactions_response)
+    return jsonify(format_error(e))  
 
 
 # Retrieve Identity data for an Item

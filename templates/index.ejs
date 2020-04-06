@@ -557,9 +557,60 @@
       });
     });
 
-    // $('#get-trans-date-btn').on('click', function(e)) {
-    //   $.get()
-    // }
+    $('#get-trans-date-btn').on('click', function(e) {
+      $.get('/transactions/date', function(data) {
+        if (data.error != null && data.error.error_code != null) {
+          // Format the error
+          var errorHtml = '<div class="inner"><p>' +
+           '<strong>' + data.error.error_code + ':</strong> ' +
+           (data.error.display_message == null ? data.error.error_message : data.error.display_message)  + '</p></div>';
+
+          if (data.error.error_code === 'PRODUCT_NOT_READY') {
+            // Add additional context for `PRODUCT_NOT_READY` errors
+            errorHtml += '<div class="inner"><p>Note: The PRODUCT_NOT_READY ' +
+             'error is returned when a request to retrieve Transaction data ' +
+             'is made before Plaid finishes the <a href="https://plaid.com/' +
+             'docs/quickstart/#transaction-data-with-webhooks">initial ' +
+             'transaction pull.</a></p></div>';
+          }
+          // Render the error
+          $('#get-transactions-data').slideUp(function() {
+            $(this).slideUp(function() {
+              $(this).html(errorHtml).slideDown();
+            });
+          });
+        } else {
+          var ctxElement = document.getElementById('transLineChart');
+          var btn = document.getElementById('get-trans-date-btn');
+          if (ctxElement.style.display === "none"){
+            ctxElement.style.display = "block";
+            btn.innerHTML = "Hide Chart";
+          } else {
+            ctxElement.style.display = "none";
+            btn.innerHTML = "Show Chart";
+          }
+          var ctx = document.getElementById('transLineChart').getContext('2d');
+          var chart = new Chart(ctx, {
+              // The type of chart we want to create
+              type: 'line',
+              // The data for our dataset
+              data: {
+                  labels: Object.keys(data.chart_data),
+                  datasets: [{
+                      label: 'Amount Spent Per Day',
+                      backgroundColor: 'rgb(255, 99, 132)',
+                      borderColor: 'rgb(255, 99, 132)',
+                      data: Object.values(data.chart_data),
+                      fill: false
+                  }]
+              },
+
+              // Configuration options go here
+              options: {}
+          });
+        }
+      });
+    });
 
     $('#get-trans-category-btn').on('click', function(e) {
       $.get('/transactions/category', function(data) {
