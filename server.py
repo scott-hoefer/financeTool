@@ -4,6 +4,7 @@ import datetime
 import plaid
 import json
 import time
+import chart_logic;
 from flask import Flask
 from flask import render_template
 from flask import request
@@ -108,50 +109,31 @@ def get_auth():
   pretty_print_response(auth_response)
   return jsonify({'error': None, 'auth': auth_response})
 
-# Retrieve Transactions for an Item
+# Retrieve Transactions and amount per category
 # https://plaid.com/docs/#transactions
-@app.route('/transactions', methods=['GET'])
+@app.route('/transactions/category', methods=['GET'])
+def get_amount_by_category():
+  transactions_response = get_transactions()
+  chart_values = chart_logic.get_chart_data_category(transactions_response['transactions'])
+  return jsonify({'error': None, 'transactions': transactions_response, 'chart_data': chart_values})
+
+@app.route('/transactions/date', methods=['GET'])
+def get_amount_by_date():
+  transactions_response = get_transactions()
+  chart_values = chart_logic.get_chart_data_date(transactions_response['transactions'])
+  return jsonify({'error': None, 'transactions': transactions_response, 'chart_data': chart_values})
+
 def get_transactions():
   # Pull transactions for the last 30 days
   start_date = '{:%Y-%m-%d}'.format(datetime.datetime.now() + datetime.timedelta(-30))
   end_date = '{:%Y-%m-%d}'.format(datetime.datetime.now())
   try:
     transactions_response = client.Transactions.get(access_token, start_date, end_date)
+    # print('PRINTING TRANSACTION RESP:')
+    # pretty_print_response(transactions_response)
+    return transactions_response
   except plaid.errors.PlaidError as e:
-    return jsonify(format_error(e))
-  # print('PRINTING TRANSACTION RESP:')
-  # pretty_print_response(transactions_response)
-  resTotal = 0.0
-  print('PRINTING CATEGORY FOR EACH TRANS:')
-  for tran in transactions_response['transactions']:
-    print('Category is {} and the amount was {}'.format(tran['category'], tran['amount']))
-    if 'Restaurants' in tran['category']:
-      resTotal += float(tran['amount'])
-  print('Total spent at restaurants in the last month is {}'.format(resTotal))
-  print('calling expenseTypeTotal...')
-  chart_values = transform_trans_data(transactions_response['transactions'])
-  return jsonify({'error': None, 'transactions': transactions_response, 'chart_data': chart_values})
-
-def transform_trans_data(transactions):
-  print(str(type(transactions)))
-  try:    
-    chartValues = dict()
-    for tran in transactions:
-      c = str(tran['category'])
-      a = float(tran['amount'])
-      if c not in chartValues.keys():
-        chartValues[c] = float(a)
-      else:
-        chartValues[c] += float(a)
-    return chartValues
-    # print("dictionary is {}".format(str(chartValues)))
-    # TODO not sure how to sum the amount as we go in a dict comprehension, or if its possible in a dict comprehension
-    # valuesComp = {str(tran['category']):float(tran['amount']) for tran in transactions}
-    # print('CHART VALUES USING DICT COMPREHENSION: {}'.format(str(valuesComp)))
-  except Exception as e:
-    print("error occurred when trying to create bar chart dict")
-    print(e)
-    return None
+    return jsonify(format_error(e))  
 
 
 # Retrieve Identity data for an Item

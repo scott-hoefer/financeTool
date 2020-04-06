@@ -83,6 +83,11 @@ Content at the top of the view
   margin-bottom: 0;
 }
 
+.trans-chart-container {
+  padding-top: 50px;
+  border: #02B1F8 2px;
+  clear: both;
+}
 /*
 
 Item overview
